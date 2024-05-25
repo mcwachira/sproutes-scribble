@@ -1,6 +1,10 @@
 import React from 'react';
+import getPosts from "@/actions/get-posts";
 
-function Home() {
+async function Home() {
+
+    const posts  = await getPosts()
+    console.log(posts)
     return (
         <div>
 
