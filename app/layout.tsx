@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import React from "react";
 import Navbar from "@/components/Navigation/navbar";
+import {cn} from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({
   const isAdmin= false;
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={cn("px-6 md:px-12 max-w-7xl mx-auto", `${inter.className}`)}>
       <Navbar/>
       {children}
       {/*{isAdmin && profile}*/}

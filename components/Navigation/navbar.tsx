@@ -13,7 +13,7 @@ async  function Navbar() {
 
     return (
 <header>
-    <nav className="bg-slate-500  py-4">
+    <nav className="py-8">
         <ul className="flex justify-between">
             <li>
   <Logo/>
