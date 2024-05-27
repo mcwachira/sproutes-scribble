@@ -38,3 +38,7 @@ next-env.d.ts
 /env.local
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/vcs.xml
+
+
+# Migrations
+/server/migrations

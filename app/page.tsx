@@ -1,6 +1,5 @@
  import React from 'react';
 
- import {Button} from "@/components/ui/button";
 
 
 async  function Home() {
@@ -11,9 +10,7 @@ async  function Home() {
           <h1>
             Welcomed to the home page
           </h1>
-            <Button>
-                Click me
-            </Button>
+
         </main>
     );
 }
