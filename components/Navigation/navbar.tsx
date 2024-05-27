@@ -16,7 +16,10 @@ async  function Navbar() {
     <nav className="py-8">
         <ul className="flex justify-between">
             <li>
-  <Logo/>
+                <Link href="/">
+                <Logo/>
+                </Link>
+
             </li>
 
             {!session ? (<Button asChild>
