@@ -5,7 +5,7 @@ function UserButton({user}:Session) {
     return (
         <div>
             <h1>
-                {usrt}
+                {user?.email}
             </h1>
 
 

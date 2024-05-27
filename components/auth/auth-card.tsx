@@ -40,7 +40,7 @@ function AuthCard(
     )}
 
     <CardFooter>
-        <BackButton label="" href=""/>
+        <BackButton label={backButtonLabel} href={  backButtonHref}/>
     </CardFooter>
 </Card>
     );

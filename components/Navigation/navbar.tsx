@@ -28,7 +28,7 @@ async  function Navbar() {
                 </Link>
 
             </Button>) :( <li>
-                <UserButton user={session?.user} expires={session?.expires_}/>
+                <UserButton user={session?.user} expires={session?.expires}/>
 
             </li>)}
 
