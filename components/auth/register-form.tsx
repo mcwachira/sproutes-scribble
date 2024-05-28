@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, {useState} from 'react';
 import AuthCard from "@/components/auth/auth-card";
 import { useForm} from "react-hook-form";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
@@ -10,6 +10,10 @@ import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import {cn} from "@/lib/utils";
 import {RegisterSchema} from "@/types/register-schema"
+import {emailRegister} from "@/server/actions/email-register";
+import {useAction} from "next-safe-action/hooks";
+import FormSuccess from "@/components/auth/form-success";
+import FormError from "@/components/auth/form-error";
 
 
 
@@ -29,10 +33,19 @@ function RegisterForm() {
 
     })
 
-    // const {execute, status} = useAction(emailSignIn, {})
+    const [error, setError] = useState("")
+    const [success, setSuccess] = useState("");
+
+
+    const {execute, status} = useAction(emailRegister , {
+        onSuccess(data){
+            if(data.error) setError(data.error)
+            if(data.success) setSuccess(data.success)
+        }
+    })
     const onSubmit = (values:z.infer<typeof RegisterSchema>) => {
 
-        // execute(values)
+        execute(values)
 
     }
     return <AuthCard cardTitle="Create an account"
@@ -81,6 +94,9 @@ function RegisterForm() {
                             <FormMessage/>
                         </FormItem>} />
 
+
+                        <FormSuccess message={success}/>
+                        <FormError message={error}/>
 
                         <Button size={"sm"} variant={"link"} asChild>
                             <Link href="/auth/reset"> Forgot your Password</Link>
