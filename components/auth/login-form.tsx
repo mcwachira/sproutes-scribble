@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, {useState} from 'react';
 import AuthCard from "@/components/auth/auth-card";
 import { useForm} from "react-hook-form";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
@@ -12,10 +12,16 @@ import Link from "next/link";
 import {cn} from "@/lib/utils";
 import {useAction} from "next-safe-action/hooks";
 import {emailSignIn} from "@/server/actions/email-signin";
+import FormSuccess from "@/components/auth/form-success";
+import FormError from "@/components/auth/form-error";
 
 
 
 function LoginForm() {
+
+
+    const [error, setError] = useState("")
+    const [success, setSuccess] = useState("");
 
     const form  = useForm<z.infer<typeof LoginSchema>>({
         resolver:zodResolver(LoginSchema),
@@ -26,7 +32,12 @@ function LoginForm() {
 
     })
 
-    const {execute, status} = useAction(emailSignIn, {})
+    const {execute, status} = useAction(emailSignIn, {
+        onSuccess(data){
+            if(data.error) setError(data.error)
+            if(data.success) setSuccess(data.success)
+        }
+    })
     const onSubmit = (values:z.infer<typeof LoginSchema>) => {
 
         execute(values)
@@ -69,6 +80,9 @@ function LoginForm() {
 
         </div>
 
+
+            <FormSuccess message={success}/>
+            <FormError message={error}/>
     <Button type="submit" className={cn("w-full my-2", status ==="executing" ? "animate-pulse" : "")}>
         {"Login"}
     </Button>
