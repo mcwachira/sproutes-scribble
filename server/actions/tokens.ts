@@ -1,6 +1,6 @@
 "use server"
 import {db} from "@/server";
-import {emailVerificationTokens} from "@/server/schema";
+import {emailVerificationTokens, users} from "@/server/schema";
 import {eq} from "drizzle-orm";
 
 
@@ -42,4 +42,38 @@ const verificationToken =  await db.insert(emailVerificationTokens).values({
 }).returning()
 
     return verificationToken
+}
+
+export const newVerification = async(token:string) => {
+
+    //checking if token exist
+    const existingToken = await getVerificationTokenByEmail(token)
+
+    if(!existingToken) return {error:'Token not found'}
+
+
+    // Checking if its expired
+    const hasExpired =  new Date(existingToken.expires) < new Date()
+
+    if(hasExpired) return {error: 'Token has expired'}
+
+
+
+    //checking if user exist based onb the token
+    const existingUser  = await db.query.users.findFirst({
+        where:eq(users.email, existingToken.email)
+    })
+
+    if(!existingUser) return {error:'email does not exist'}
+
+    await db.update(users).set({
+        emailVerified: new Date(),
+        email:existingToken.email
+    })
+
+
+    //if token verified delete the users token after verification
+    await db.delete(emailVerificationTokens).where(eq(emailVerificationTokens.id, existingToken.id))
+
+    return {success: 'Email verified'}
 }

@@ -1,9 +1,10 @@
 import React from 'react';
+import EmailVerificationForm from "@/components/auth/email-verification-form";
 
-function NewVerification() {
+function EmailVerification() {
     return (
-        <div></div>
+ <EmailVerificationForm/>
     );
 }
 
-export default Page;
+export default EmailVerification
