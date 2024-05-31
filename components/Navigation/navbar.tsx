@@ -14,9 +14,9 @@ async  function Navbar() {
     return (
 <header>
     <nav className="py-8">
-        <ul className="flex justify-between">
+        <ul className="flex justify-between  items-center">
             <li>
-                <Link href="/">
+                <Link href="/" aria-label="Sproutes and scribble ">
                 <Logo/>
                 </Link>
 
