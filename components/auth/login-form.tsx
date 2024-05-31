@@ -4,7 +4,6 @@ import AuthCard from "@/components/auth/auth-card";
 import { useForm} from "react-hook-form";
 import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {LoginSchema} from "@/types/login-schema";
 import * as z from "zod";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
@@ -14,6 +13,10 @@ import {useAction} from "next-safe-action/hooks";
 import {emailSignIn} from "@/server/actions/email-signin";
 import FormSuccess from "@/components/auth/form-success";
 import FormError from "@/components/auth/form-error";
+
+import {useRouter} from "next/navigation";
+import {LoginSchema} from "@/types/login-schema";
+
 
 
 
@@ -26,8 +29,8 @@ function LoginForm() {
     const form  = useForm<z.infer<typeof LoginSchema>>({
         resolver:zodResolver(LoginSchema),
         defaultValues: {
-            email:"",
-            password:""
+            email: "",
+            password: "",
         },
 
     })
