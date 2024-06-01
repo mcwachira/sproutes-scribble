@@ -15,12 +15,15 @@ import Image from "next/image"
 import {LogOut, Moon, Settings, Sun, TruckIcon} from "lucide-react";
 import {useTheme} from "next-themes";
 import {Switch} from "@/components/ui/switch";
+import {useRouter} from "next/navigation";
 
 
 function UserButton({user}:Session) {
 
     const {setTheme, theme} = useTheme()
     const [checked, setChecked] = useState(false)
+
+    const router = useRouter()
 
 const setSwitchTheme = () => {
         switch (theme){
@@ -66,7 +69,7 @@ const setSwitchTheme = () => {
                 </span>
 
                 <DropdownMenuSeparator />
-                <DropdownMenuItem          className="group py-2 font-medium cursor-pointer ">
+                <DropdownMenuItem          className="group py-2 font-medium cursor-pointer " onClick={() =>  router.push('/dashboard/orders')}>
                     <TruckIcon
                         size={14}
                         className="mr-3 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
@@ -74,7 +77,7 @@ const setSwitchTheme = () => {
                     MyOrders
 
                 </DropdownMenuItem>
-                <DropdownMenuItem          className="group py-2 font-medium cursor-pointer ">
+                <DropdownMenuItem          className="group py-2 font-medium cursor-pointer " onClick={() =>  router.push('/dashboard/settings')}>
                     <Settings
                         size={14}
                         className="mr-3 group-hover:rotate-180 transition-all duration-300 ease-in-out"
