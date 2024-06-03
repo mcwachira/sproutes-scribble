@@ -4,9 +4,13 @@ import {createSafeActionClient} from "next-safe-action";
 import {LoginSchema} from "@/types/login-schema";
 import {db} from "@/server";
 import {eq} from "drizzle-orm";
-import {users} from "@/server/schema";
-import {generateEmailVerificationToken} from "@/server/actions/tokens";
-import {sendVerificationEmail} from "@/server/actions/email";
+import {twoFactorTokens, users} from "@/server/schema";
+import {
+    generateEmailVerificationToken,
+    generateTwoFactorToken,
+    getTwoFactorTokenByEmail
+} from "@/server/actions/tokens";
+import {sendTwoFactoTokenByEmail, sendVerificationEmail} from "@/server/actions/email";
 import {signIn} from "@/server/auth";
 import {AuthError} from "next-auth";
 
@@ -40,6 +44,49 @@ export const emailSignIn = action (
                 }
             }
 
+
+
+            //get 2factor token
+            if(existingUser.twoFactorEnabled && existingUser.email) {
+
+                console.log(existingUser.email)
+                if (code) {
+                    const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email)
+
+                    if (!twoFactorToken) {
+                        return {error: 'invalid token'}
+                    }
+
+                    if (twoFactorToken.token !== code) {
+                        return {
+                            error: "Invalid token"
+                        }
+                    }
+
+                    const hasExpired = new Date(twoFactorToken.expires) < new Date()
+
+                    if (hasExpired) {
+                        return {
+                            error: 'Token has expired'
+                        }
+
+                    }
+
+                    await db.delete(twoFactorTokens).where(eq(twoFactorTokens?.id, twoFactorToken.id))
+                } else {
+
+                    console.log(existingUser.email, 'email to genetAILIL ')
+                    const token = await generateTwoFactorToken(existingUser.email);
+                    console.log(token, 'token generated')
+                    if (!token) {
+                        return {error: 'Token not generated!'}
+
+                    }
+                    await sendTwoFactoTokenByEmail(token[0].email, token[0].token)
+                    return {twoFactor: "Two factor token sent"}
+
+                }
+            }
             // login in user if email is verified
 
             await signIn("credentials", {

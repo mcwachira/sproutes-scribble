@@ -16,6 +16,8 @@ import FormError from "@/components/auth/form-error";
 
 import {useRouter} from "next/navigation";
 import {LoginSchema} from "@/types/login-schema";
+import {boolean} from "drizzle-orm/pg-core";
+import {InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp";
 
 
 
@@ -25,12 +27,14 @@ function LoginForm() {
 
     const [error, setError] = useState("")
     const [success, setSuccess] = useState("");
+    const [showTwoFactor, setShowTwoFactor] = useState<boolean>(false)
 
     const form  = useForm<z.infer<typeof LoginSchema>>({
         resolver:zodResolver(LoginSchema),
         defaultValues: {
             email: "",
             password: "",
+            code:"",
         },
 
     })
@@ -39,6 +43,10 @@ function LoginForm() {
         onSuccess(data){
             if(data.error) setError(data.error)
             if(data.success) setSuccess(data.success)
+
+            if(data.twoFactor){
+                setShowTwoFactor(!showTwoFactor)
+            }
         }
     })
     const onSubmit = (values:z.infer<typeof LoginSchema>) => {
@@ -54,30 +62,68 @@ function LoginForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
 
             <div>
-            <FormField control={form.control} name="email" render={({field}) => <FormItem>
-                    <FormLabel>
-                        Email
-                    </FormLabel>
-                    <FormControl>
-                        <Input {...field}  type="email" placeholder="example@example.com"  autoComplete="email"/>
-                    </FormControl>
-                    <FormDescription/>
-                    <FormMessage/>
-                </FormItem>} />
+                {showTwoFactor && (
+                    <FormField
+                        control={form.control}
+                        name="code"
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>
+                                    We&apos;ve sent you a two factor code to your email.
+                                </FormLabel>
+                                <FormControl>
+                                    <InputOTP
+                                        disabled={status === "executing"}
+                                        {...field}
+                                        maxLength={6}
+                                    >
+                                        <InputOTPGroup>
+                                            <InputOTPSlot index={0} />
+                                            <InputOTPSlot index={1} />
+                                            <InputOTPSlot index={2} />
+                                            <InputOTPSlot index={3} />
+                                            <InputOTPSlot index={4} />
+                                            <InputOTPSlot index={5} />
+                                        </InputOTPGroup>
+                                    </InputOTP>
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                )}
 
-            <FormField control={form.control} name="password" render={({field}) => <FormItem>
-                <FormLabel>
-             Password
-                </FormLabel>
-                    <FormControl>
-                        <Input {...field}  type="password" autoComplete="current-password" placeholder="*****" />
-                    </FormControl>
-                    <FormDescription/>
-                    <FormMessage/>
-                </FormItem>} />
+                {!showTwoFactor && (
+                    <>
+                        <FormField control={form.control} name="email" render={({field}) => <FormItem>
+                            <FormLabel>
+                                Email
+                            </FormLabel>
+                            <FormControl>
+                                <Input {...field}  type="email" placeholder="example@example.com"  autoComplete="email"/>
+                            </FormControl>
+                            <FormDescription/>
+                            <FormMessage/>
+                        </FormItem>} />
+
+                        <FormField control={form.control} name="password" render={({field}) => <FormItem>
+                            <FormLabel>
+                                Password
+                            </FormLabel>
+                            <FormControl>
+                                <Input {...field}  type="password" autoComplete="current-password" placeholder="*****" />
+                            </FormControl>
+                            <FormDescription/>
+                            <FormMessage/>
+                        </FormItem>} />
 
 
-            <Button size={"sm"} variant={"link"} asChild>
+                    </>
+                )}
+
+
+
+            <Button size={"sm"} variant={"link"}  className="px-0" asChild>
                 <Link href="/auth/reset"> Forgot your Password</Link>
             </Button>
 
@@ -86,8 +132,8 @@ function LoginForm() {
 
             <FormSuccess message={success}/>
             <FormError message={error}/>
-    <Button type="submit" className={cn("w-full my-2", status ==="executing" ? "animate-pulse" : "")}>
-        {"Login"}
+    <Button type="submit" className={cn("w-full my-4", status ==="executing" ? "animate-pulse" : "")}>
+        {showTwoFactor ? "Verify":"Login"}
     </Button>
 
 

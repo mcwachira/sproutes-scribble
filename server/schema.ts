@@ -52,7 +52,7 @@ export const accounts = pgTable(
 export const emailVerificationTokens = pgTable(
     "email_verification_token",
     {
-        id: text("identifier").notNull().$defaultFn(() => createId()),
+        id: text("id").notNull().$defaultFn(() => createId()),
         token: text("token").notNull(),
         expires: timestamp("expires", { mode: "date" }).notNull(),
         email:text("email").notNull()
@@ -65,7 +65,7 @@ export const emailVerificationTokens = pgTable(
 export const passwordResetTokens = pgTable(
     "password_reset_verification_token",
     {
-        id: text("identifier").notNull().$defaultFn(() => createId()),
+        id: text("id").notNull().$defaultFn(() => createId()),
         token: text("token").notNull(),
         expires: timestamp("expires", { mode: "date" }).notNull(),
              email:text("email").notNull()
@@ -78,10 +78,11 @@ export const passwordResetTokens = pgTable(
 export const twoFactorTokens = pgTable(
     "two_factor_token",
     {
-        id: text("identifier").notNull().$defaultFn(() => createId()),
+        id: text("id").notNull().$defaultFn(() => createId()),
         token: text("token").notNull(),
         expires: timestamp("expires", { mode: "date" }).notNull(),
-             email:text("email").notNull()
+             email:text("email").notNull(),
+        userId:text('userID').references(() => users.id, {onDelete:'cascade'})
     },
     (vt) => ({
         compoundKey: primaryKey({ columns: [vt.id, vt.token] }),

@@ -44,6 +44,7 @@ export const Settings =action(SettingsSchema, async(values) => {
 
 
     if(values.password && values.newPassword && dbUser.password) {
+        //check if password entered matches with  the one stored in the database
         const passwordMatch = await bcrypt.compare(values.password, dbUser.password)
         if (!passwordMatch) {
             return {
@@ -51,9 +52,10 @@ export const Settings =action(SettingsSchema, async(values) => {
             }
         }
 
-        const samePassword = await bcrypt.compare(values.newPassword, dbUser.password)
 
         //check if the password is the same as the old one
+        const samePassword = await bcrypt.compare(values.newPassword, dbUser.password)
+
         if (samePassword) {
             return {
                 error: "New Password is the same as the old"
@@ -65,7 +67,7 @@ export const Settings =action(SettingsSchema, async(values) => {
 
     }
                 const updateUser= await db.update(users).set({
-
+                    twoFactorEnabled: values.isTwoFactorEnabled,
                     name:values.name,
                     password: values.password,
                     email:values.email,

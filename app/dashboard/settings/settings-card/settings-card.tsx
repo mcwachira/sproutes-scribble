@@ -69,6 +69,7 @@ function SettingsCard(session:SettingsForm) {
         }
     })
     const onSubmit = (values:z.infer<typeof SettingsSchema>) => {
+        console.log(values)
 execute(values)
     }
     return (
@@ -150,7 +151,7 @@ execute(values)
                         />
                         <FormField
                             control={form.control}
-                            name="password"
+                            name="newPassword"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>New Password</FormLabel>
@@ -165,7 +166,7 @@ execute(values)
                         />
                         <FormField
                             control={form.control}
-                            name="password"
+                            name="isTwoFactorEnabled"
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel> Two Factor Authentication </FormLabel>
@@ -176,7 +177,10 @@ execute(values)
                                      <Switch disabled={
                                          status === "executing"  || session.session.user.isOAuth === true
 
-                                     }/>
+                                     }
+                                     checked={field.value}
+                                             onCheckedChange={field.onChange}
+                                     />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
