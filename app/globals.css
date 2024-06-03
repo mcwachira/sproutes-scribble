@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -64,4 +63,8 @@ body {
     --input: 215 27.9% 16.9%;
     --ring: 263.4 70% 50.4%;
   }
+}
+
+[data-ut-element="button"][data-state="uploading"]::after {
+  @apply bg-primary/50;
 }

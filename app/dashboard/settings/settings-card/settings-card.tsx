@@ -1,5 +1,6 @@
 "use client"
 import React, {useState} from 'react';
+import Image from "next/image"
 import {
     Card,
     CardContent,
@@ -29,6 +30,7 @@ import FormSuccess from "@/components/auth/form-success";
 import FormError from "@/components/auth/form-error";
 import {useAction} from "next-safe-action/hooks";
 import {Settings} from "@/server/actions/settings";
+import {UploadButton} from "@/app/api/uploadthing/upload";
 
 type SettingsForm={
     session:Session
@@ -106,20 +108,47 @@ execute(values)
                             render={({ field }) => (
                                 <FormItem>
                                     <FormLabel>Avatar</FormLabel>
-                                    <div className="flex items-center">
+                                    <div className="flex items-center gap-4">
                                         {!form.getValues("image") && (
                                             <div className="font-bold">
-
                                                 {session.session.user?.name?.charAt(0).toUpperCase()}
                                             </div>
                                         )}
-
-                                        {
-
-                                            form.getValues("image") && (
-                                                <Image src={form.getValues("image")!}  width={42} height={42} className="rounded-full" alt="User Image "/>
-                                            )
-                                        }
+                                        {form.getValues("image") && (
+                                            <Image
+                                                src={form.getValues("image")!}
+                                                width={42}
+                                                height={42}
+                                                className="rounded-full"
+                                                alt="User Image"
+                                            />
+                                        )}
+                                        <UploadButton
+                                            className="scale-75 ut-button:ring-primary  ut-label:bg-red-50  ut-button:bg-primary/75  hover:ut-button:bg-primary/100 ut:button:transition-all ut-button:duration-500  ut-label:hidden ut-allowed-content:hidden"
+                                            endpoint="avatarUploader"
+                                            onUploadBegin={() => {
+                                                setAvatarUploading(true)
+                                            }}
+                                            onUploadError={(error) => {
+                                                form.setError("image", {
+                                                    type: "validate",
+                                                    message: error.message,
+                                                })
+                                                setAvatarUploading(false)
+                                                return
+                                            }}
+                                            onClientUploadComplete={(res) => {
+                                                form.setValue("image", res[0].url!)
+                                                setAvatarUploading(false)
+                                                return
+                                            }}
+                                            content={{
+                                                button({ ready }) {
+                                                    if (ready) return <div>Change Avatar</div>
+                                                    return <div>Uploading...</div>
+                                                },
+                                            }}
+                                        />
                                     </div>
                                     <FormControl>
                                         <Input placeholder="User Image" type='hiddden' disabled={status === "executing"} {...field} />
