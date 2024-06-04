@@ -58,7 +58,7 @@ const setSwitchTheme = () => {
             <DropdownMenuContent className="w-64 p-6" align="end">
                 <div className="mb-4 p-4 flex flex-col gap-1 items-center rounded-lg  bg-primary/10">
     {user.image && (
-        <Image src={user.image} alt={user.name!} fill={true}  width={36} />
+        <Image src={user.image} alt={user.name!} fill={true}   />
     )}
 </div>
                 <p className="font-bold text-xs">
