@@ -5,6 +5,7 @@ import React from "react";
 import Navbar from "@/components/Navigation/navbar";
 import {cn} from "@/lib/utils";
 import {ThemeProvider} from "@/components/providers/theme-provider";
+import { Toaster, toast } from 'sonner'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
           disableTransitionOnChange
       >
       <Navbar/>
+          <Toaster  />
       {children}
       {/*{isAdmin && profile}*/}
 

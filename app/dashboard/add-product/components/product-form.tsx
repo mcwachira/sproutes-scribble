@@ -27,9 +27,13 @@ import Tiptap from "@/app/dashboard/add-product/components/tip-tap";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useAction} from "next-safe-action/hooks";
 import {createProduct} from "@/server/actions/create-product";
+import {useRouter} from "next/navigation";
+import {toast} from "sonner";
 
 
 function ProductForm() {
+
+    const router = useRouter()
     const form = useForm<zProductSchema>({
         resolver:zodResolver(ProductSchema),
         defaultValues:{
@@ -45,9 +49,14 @@ function ProductForm() {
         onSuccess:(data) => {
             if(data?.success){
                 console.log(data.success)
+                router.push("/dashboard/products")
+                toast.success(data.success)
             }
         },
 
+        onExecute:(data) => {
+            toast.loading('Creating product')
+        },
         onError:(error) => console.log(error),
     })
     const onSubmit = async(values:zProductSchema) => {

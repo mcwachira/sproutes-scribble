@@ -2,6 +2,22 @@ import React from 'react';
 import {BarChart, Package, PenSquare, Settings, Truck} from "lucide-react";
 import {auth} from "@/server/auth";
 import DashboardNav from "@/components/Navigation/dashboard-nav";
+import Toaster from "@/components/providers/toaster";
+import {toast} from "sonner";
+
+
+// ...
+
+function App() {
+    return (
+        <div>
+            <Toaster/>
+            <button onClick={() => toast('My first toast')}>
+                Give me a toast
+            </button>
+        </div>
+    )
+}
 
 export default async function DashboardLayout({
     children,}:{
