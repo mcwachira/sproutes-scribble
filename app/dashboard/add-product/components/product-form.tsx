@@ -1,6 +1,6 @@
 "use client"
 import {ProductSchema, zProductSchema} from "@/types/product-schema";
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {useForm} from "react-hook-form";
 import {
     Card,
@@ -27,13 +27,17 @@ import Tiptap from "@/app/dashboard/add-product/components/tip-tap";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {useAction} from "next-safe-action/hooks";
 import {createProduct} from "@/server/actions/create-product";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import {toast} from "sonner";
+import {getProduct} from "@/server/actions/get-products";
+import {useEditor} from "@tiptap/react";
 
 
 function ProductForm() {
 
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const editMode = searchParams.get("id")
     const form = useForm<zProductSchema>({
         resolver:zodResolver(ProductSchema),
         defaultValues:{
@@ -45,6 +49,34 @@ function ProductForm() {
     })
 
 
+    const checkProduct = async(id:number) => {
+        if(editMode){
+            const data = await getProduct(id)
+            if(data.error){
+                toast.error(data.error)
+                router.push("/dashboard/products")
+
+                return
+            }
+
+            if(data.success){
+                const id = parseInt(editMode)
+                form.setValue("title", data.success.title)
+                form.setValue("description", data.success.description)
+                    form.setValue("price", data.success.price)
+                    form.setValue("id", id)
+            }
+        }
+
+    }
+
+    //checks if component is in edit mode during mounting
+
+    useEffect(() => {
+        if(editMode){
+      checkProduct(parseInt(editMode))
+        }
+    },[])
     const {execute, status} =useAction(createProduct, {
         onSuccess:(data) => {
             if (data?.error) {
@@ -57,7 +89,15 @@ function ProductForm() {
         },
 
         // onExecute:(data) => {
+
+        // if(editMode){
+        //toast.loading('editing a product')
+
+        //}
+        // if(!editMode){
         //     toast.loading('Creating product')
+
+        //}
         // },
         onError:(error) => console.log(error),
     })
@@ -69,8 +109,17 @@ function ProductForm() {
         <div>
             <Card>
                 <CardHeader>
-                    <CardTitle>Card Title</CardTitle>
-                    <CardDescription>Card Description</CardDescription>
+                    <CardTitle>
+                        {editMode ? <span>
+                            Edit Product
+                        </span>
+                        : <span>
+                                Create Product
+                            </span>
+                        }
+
+                    </CardTitle>
+                    <CardDescription>{editMode ? "Make changes to existing products":"Add a brand new product"}</CardDescription>
                 </CardHeader>
                 <CardContent>
 
@@ -127,7 +176,10 @@ function ProductForm() {
                                     </FormItem>
                                 )}
                             />
-                            <Button disabled={status ==="executing" || !form.formState.isValid || !form.formState.isDirty} className="w-full" type="submit">Submit</Button>
+                            <Button disabled={status ==="executing" || !form.formState.isValid || !form.formState.isDirty} className="w-full" type="submit">
+
+                                {editMode ? "Save changes":"Create Product"}
+                            </Button>
                         </form>
                     </Form>
 

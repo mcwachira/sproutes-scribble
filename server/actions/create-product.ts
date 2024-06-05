@@ -5,6 +5,7 @@ import {ProductSchema} from "@/types/product-schema";
 import {db} from "@/server";
 import {eq} from "drizzle-orm";
 import {products} from "@/server/schema";
+import {revalidatePath} from "next/cache";
 
 const action = createSafeActionClient()
 
@@ -21,13 +22,14 @@ export  const createProduct = action(
 
             if(!currentProduct) return {error:'Product not found '}
 
-            const editedproduct = await db.update(products)
+            const editedProduct = await db.update(products)
                 .set({description, price, title})
                 .where(eq(products.id, id))
                 .returning()
+                revalidatePath("/dashboard/products")
 
                 return {
-                success:`Product ${editedproduct[0].title} has been updated`
+                success:`Product ${editedProduct[0].title} has been updated`
                 }
             }
 
@@ -36,6 +38,10 @@ export  const createProduct = action(
                     .insert(products)
                     .values({description, price, title})
                     .returning()
+                revalidatePath("/dashboard/products")
+                return {
+                    success:`Product ${newProduct[0].title} has been Created`
+                }
             }
 
         }catch(err){
