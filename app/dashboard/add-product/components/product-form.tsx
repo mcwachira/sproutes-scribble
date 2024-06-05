@@ -47,16 +47,18 @@ function ProductForm() {
 
     const {execute, status} =useAction(createProduct, {
         onSuccess:(data) => {
-            if(data?.success){
-                console.log(data.success)
+            if (data?.error) {
+                toast.error(data.error)
+            }
+            if (data?.success) {
                 router.push("/dashboard/products")
                 toast.success(data.success)
             }
         },
 
-        onExecute:(data) => {
-            toast.loading('Creating product')
-        },
+        // onExecute:(data) => {
+        //     toast.loading('Creating product')
+        // },
         onError:(error) => console.log(error),
     })
     const onSubmit = async(values:zProductSchema) => {
