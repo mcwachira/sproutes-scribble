@@ -6,7 +6,12 @@ import {columns} from "@/app/dashboard/products/columns";
 
 async function ProductsPage() {
 
-    const products = await db.query.products.findMany({orderBy:(products, {desc}) =>[desc(products.id)] })
+    const products = await db.query.products.findMany({
+        with:{
+            productVariants:{with:{variantImages:true, variantTags:true}}
+        },
+
+        orderBy:(products, {desc}) =>[desc(products.id)] })
 
     if(!products) throw new Error("No products found")
 

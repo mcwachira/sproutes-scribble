@@ -11,18 +11,21 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import {Button} from "@/components/ui/button";
-import {MoreHorizontal} from "lucide-react";
+import {MoreHorizontal, PlusCircle} from "lucide-react";
 import {useAction} from "next-safe-action/hooks";
 import {deleteProduct} from "@/server/actions/delete-product";
 import {toast} from "sonner";
 import Link from "next/link";
+import {VariantsWithImagesTags} from "@/lib/infer-types";
+import {TooltipProvider,Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
+import ProductVariant from "@/app/dashboard/products/product-variant";
 
 
 type ProductColumn ={
     title:string,
     price:number,
     image:string,
-    variants:any,
+    variants:VariantsWithImagesTags[],
     id:number
 }
 
@@ -97,7 +100,61 @@ export const columns:ColumnDef<ProductColumn>[]=[
     },
     {
         accessorKey:"variants" ,
-        header:'Variants'
+        header:'Variants',
+        cell:({row}) =>{
+            const variants  =  row.getValue("variants") as VariantsWithImagesTags[]
+
+            return (
+<div>
+    {variants.map((variant) => (
+        <div key={variant.id}>
+            <TooltipProvider>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <ProductVariant
+                        productID={variant.productID}
+                        variant={variant}
+                        editMode={true}
+                        >
+                            <div className="h-5 w-5 rounded-full" key={variant.id} style={{background:variant.color}}/>
+
+                        </ProductVariant>
+                    </TooltipTrigger>
+
+                    <TooltipContent>
+                        <p>
+                            {variant.productType}
+                        </p>
+                    </TooltipContent>
+                </Tooltip>
+
+            </TooltipProvider>
+
+        </div>
+    ))}
+
+    <TooltipProvider>
+        <Tooltip>
+            <TooltipTrigger asChild>
+              <ProductVariant editMode={false} >
+                  <PlusCircle className="h-5 w-5"/>
+              </ProductVariant>
+
+
+
+            </TooltipTrigger>
+
+            <TooltipContent>
+<p>
+    Create a new variant
+</p>
+            </TooltipContent>
+        </Tooltip>
+
+    </TooltipProvider>
+</div>
+            )
+        }
 
     },
     {
