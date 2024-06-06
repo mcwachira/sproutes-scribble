@@ -1,9 +1,9 @@
 "use client"
 
 import {
-    ColumnDef,
+    ColumnDef, ColumnFiltersState,
     flexRender,
-    getCoreRowModel,
+    getCoreRowModel, getFilteredRowModel, getPaginationRowModel, SortingState,
     useReactTable,
 } from "@tanstack/react-table"
 
@@ -16,6 +16,19 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card"
+import React, {useState} from "react";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import {ChevronLeftIcon, ChevronRightIcon} from "lucide-react";
+
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
@@ -25,14 +38,50 @@ export function DataTable<TData, TValue>({
                                              columns,
                                              data,
                                          }: DataTableProps<TData, TValue>) {
+
+
+
+    const [sorting, setSorting] = useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
     const table = useReactTable({
         data,
         columns,
         getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel:getPaginationRowModel(),
+        getFilteredRowModel:getFilteredRowModel(),
+        onColumnFiltersChange:setColumnFilters,
+        state:{
+            sorting,
+            columnFilters,
+        }
+
     })
 
     return (
         <div className="rounded-md border">
+        <Card>
+            <CardHeader>
+                <CardTitle>
+             Your Products
+                </CardTitle>
+                <CardDescription>
+                    Update, edit or delete your products
+
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+
+
+                <div>
+
+                <div>
+
+                    <Input placeholder="Filter Products"
+                           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+                           onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)} />
+                </div>
+
             <Table>
                 <TableHeader>
                     {table.getHeaderGroups().map((headerGroup) => (
@@ -75,6 +124,32 @@ export function DataTable<TData, TValue>({
                     )}
                 </TableBody>
             </Table>
+
+                    <div className="flex items-center justify-end gap-4 pt-4 ">
+                        <Button
+                            disabled={!table.getCanPreviousPage()}
+                            onClick={() => table.previousPage()}
+                            variant="outline">
+                            <ChevronLeftIcon className="w-4 h-4"/>
+                            <span>
+                                Go to previous
+                            </span>
+                        </Button>
+
+                        <Button
+                            disabled={!table.getCanNextPage()}
+                            onClick={() => table.nextPage()}
+                            variant="outline">
+
+                            <span>
+                                Go to the next page
+                            </span>
+                            <ChevronRightIcon className="w-4 h-4"/>
+                        </Button>
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
         </div>
     )
 }
