@@ -3,7 +3,6 @@ import {useFieldArray, useFormContext} from "react-hook-form";
 import {VariantSchema} from "@/types/variant-schema";
 import * as z from 'zod'
 import {FormControl, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import InputTags from "@/app/dashboard/products/input-tags";
 import {UploadDropzone} from "@/app/api/uploadthing/upload";
 import {
     Table,

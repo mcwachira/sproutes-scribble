@@ -1,5 +1,5 @@
 "use client"
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {VariantsWithImagesTags} from "@/lib/infer-types";
 import {
     Form,
@@ -19,6 +19,9 @@ import {Button} from "@/components/ui/button";
 import {InputTags} from "@/app/dashboard/products/input-tags";
 import {Input} from "@/components/ui/input";
 import VariantImages from "@/app/dashboard/products/variant-images";
+import {createVariant} from "@/server/actions/create-variant";
+import {useAction} from "next-safe-action/hooks";
+import {toast} from "sonner";
 
 export const ProductVariant = ({
     editMode,
@@ -33,14 +36,35 @@ export const ProductVariant = ({
     children:React.ReactNode
 }) =>  {
 
-    const onSubmit = () => {
+    const [open, setOpen] = useState(false)
 
+
+    const {execute, status} = useAction(createVariant, {
+        onExecute(){
+            toast.loading('Creating a variant', {duration:1})
+            setOpen(false)
+        },
+        onSuccess(data){
+            if(data?.error){
+
+                toast.error(data.error)
+            }
+            if(data?.success){
+                toast.success(data.success)
+            }
+        }
+    })
+    const onSubmit = (values: z.infer<typeof VariantSchema>) => {
+        console.log(values)
+execute(values)
     }
 
     const form =  useForm<z.infer<typeof VariantSchema>>({
         resolver:zodResolver(VariantSchema),
         defaultValues:{
+            tags: [],
    color:"#000000",
+            variantImages: [],
             editMode:editMode,
             id:undefined,
             productID,
@@ -49,9 +73,39 @@ export const ProductVariant = ({
         mode:"onChange",
     })
 
+    const setEdit = () => {
+        if (!editMode) {
+            form.reset()
+            return
+        }
+        if (editMode && variant) {
+            form.setValue("editMode", true)
+            form.setValue("id", variant.id)
+            form.setValue("productID", variant.productID)
+            form.setValue("productType", variant.productType)
+            form.setValue("color", variant.color)
+            form.setValue(
+                "tags",
+                variant.variantTags.map((tag) => tag.tag)
+            )
+            form.setValue(
+                "variantImages",
+                variant.variantImages.map((img) => ({
+                    name: img.name,
+                    size: img.size,
+                    url: img.url,
+                }))
+            )
+        }
+    }
+
+    useEffect(() => {
+        setEdit()
+    }, [])
+
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger>{children}</DialogTrigger>
             <DialogContent className="lg:max-w-screen overflow-y-scroll max-h-[720px] rounded-md">
                 <DialogHeader>
@@ -113,6 +167,9 @@ export const ProductVariant = ({
 
                         <VariantImages/>
 
+                        <div className="flex gap-4 items-center">
+
+
                         {editMode && variant && (
                             <Button type="button" onClick={(e) => e.preventDefault()}>
 
@@ -124,7 +181,7 @@ export const ProductVariant = ({
                             {editMode ? "Update Variant":"Create Variant"}
 
                         </Button>
-
+                        </div>
                     </form>
                 </Form>
             </DialogContent>
