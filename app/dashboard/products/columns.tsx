@@ -18,7 +18,7 @@ import {toast} from "sonner";
 import Link from "next/link";
 import {VariantsWithImagesTags} from "@/lib/infer-types";
 import {TooltipProvider,Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip";
-import ProductVariant from "@/app/dashboard/products/product-variant";
+import {ProductVariant} from "@/app/dashboard/products/product-variant";
 
 
 type ProductColumn ={
