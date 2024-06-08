@@ -22,6 +22,7 @@ import VariantImages from "@/app/dashboard/products/variant-images";
 import {createVariant} from "@/server/actions/create-variant";
 import {useAction} from "next-safe-action/hooks";
 import {toast} from "sonner";
+import {deleteVariant} from "@/server/actions/delete-variant";
 
 export const ProductVariant = ({
     editMode,
@@ -40,10 +41,26 @@ export const ProductVariant = ({
 
 
     const {execute, status} = useAction(createVariant, {
-        onExecute(){
-            toast.loading('Creating a variant', {duration:1})
-            setOpen(false)
-        },
+        // onExecute(){
+        //     toast.loading('Creating a variant', {duration:1})
+        //     setOpen(false)
+        // },
+        onSuccess(data){
+            if(data?.error){
+
+                toast.error(data.error)
+            }
+            if(data?.success){
+                toast.success(data.success)
+            }
+        }
+    })
+
+    const variantAction = useAction(deleteVariant, {
+        // onExecute(){
+        //     toast.loading('deleting variant', {duration:1})
+        //     setOpen(false)
+        // },
         onSuccess(data){
             if(data?.error){
 
@@ -171,12 +188,19 @@ execute(values)
 
 
                         {editMode && variant && (
-                            <Button type="button" onClick={(e) => e.preventDefault()}>
+                            <Button type="button"
+                                    // disabled={variantAction.status === 'executing' || !form.formState.isValid || !form.formState.isDirty}
+                                    onClick={(e) => {
+                                e.preventDefault()
+
+                            variantAction.execute({id:variant.id})
+                            }
+                            }>
 
                                 Delete Variant
                             </Button>
                         )}
-                        <Button type="submit">
+                        <Button type="submit" disabled={status === 'executing' || !form.formState.isValid || !form.formState.isDirty}>
 
                             {editMode ? "Update Variant":"Create Variant"}
 

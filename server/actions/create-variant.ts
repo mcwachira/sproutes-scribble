@@ -2,12 +2,20 @@
 
 import {createSafeActionClient} from "next-safe-action";
 import {VariantSchema} from "@/types/variant-schema";
-import {productVariants, variantImages, variantTags} from "@/server/schema";
+import {products, productVariants, variantImages, variantTags} from "@/server/schema";
 import {db} from "@/server";
 import {eq} from "drizzle-orm";
 import {revalidatePath} from "next/cache";
+import algoliasearch from 'algoliasearch'
 
 const action = createSafeActionClient()
+
+const client = algoliasearch(
+    process.env.NEXT_PUBLIC_AGOLIA_ID! ,
+process.env.ALGOLIA_ADMIN!
+)
+
+const algoliaIndex = client.initIndex("products")
 
 export const createVariant = action(VariantSchema, async({
     variantImages:newImgs,
@@ -51,6 +59,15 @@ export const createVariant = action(VariantSchema, async({
 
                     }))
                 )
+
+
+                    algoliaIndex.saveObject({
+                        objectID:editVariant[0].id.toString(),
+                        id:editVariant[0].productID,
+                        productType:editVariant[0].productType,
+                        variantImages:newImgs[0].url
+                    })
+
                 revalidatePath(("/dashboard/products"))
                 return {success: `Edited ${productType}`}
             }
@@ -59,6 +76,10 @@ export const createVariant = action(VariantSchema, async({
                 const newVariant = await db.insert(productVariants).values({
                     color, productType, productID
                 }).returning()
+
+                const product = await db.query.products.findFirst({
+                    where:(eq(products.id, productID)),
+                })
 
                 await db.insert(variantTags).values(
                     tags.map((tag) => ({
@@ -76,6 +97,17 @@ export const createVariant = action(VariantSchema, async({
                         order: idx,
                     }))
                 )
+
+                if(product){
+                    algoliaIndex.saveObject({
+                        objectID:newVariant[0].id.toString(),
+                        id:newVariant[0].productID,
+                        title:product.title,
+                        price:product.price,
+                        productType:newVariant[0].productType,
+                        variantImages:newImgs[0].url
+                    })
+                }
                 revalidatePath(("/dashboard/products"))
                 return {success: `Added the ${productType}`}
             }

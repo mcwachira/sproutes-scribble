@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import {Inter, Roboto} from "next/font/google";
 import "./globals.css";
 import React from "react";
 import Navbar from "@/components/Navigation/navbar";
@@ -7,7 +7,11 @@ import {cn} from "@/lib/utils";
 import {ThemeProvider} from "@/components/providers/theme-provider";
 import { Toaster, toast } from 'sonner'
 
-const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({
+    weight: ["400", "500", "700", "900"],
+    subsets: ["latin"],
+})
+
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,20 +27,18 @@ export default function RootLayout({
 }>) {
 
   const isAdmin= false;
+    console.log(process.env.GOOGLE_CLIENT_ID)
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={cn("px-6 md:px-12 max-w-7xl mx-auto", `${inter.className}`)}>
-      <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-      >
+      <html lang="en" suppressHydrationWarning>
+      <body className={roboto.className}>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="flex-grow px-6 md:px-12 mx-auto max-w-8xl">
       <Navbar/>
           <Toaster  />
       {children}
       {/*{isAdmin && profile}*/}
 
+          </div>
       </ThemeProvider>
       </body>
     </html>
