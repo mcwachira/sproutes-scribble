@@ -55,9 +55,9 @@ const ActionCell = ({row}: { row:Row<ProductColumn> }) => {
                 toast.success(data.success)
             }
         },
-        onExecute: () => {
-            toast.loading("Deleting Product")
-        },
+        // onExecute: () => {
+        //     toast.loading("Deleting Product")
+        // },
     })
 
 
