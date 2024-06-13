@@ -27,7 +27,7 @@ function Review({ reviews}:{ reviews:ReviewsWithUser[]}) {
                              </p>
 
                              <div>
-                              <Stars ratings={review.rating}/>
+                              <Stars rating={review.rating}/>
 
 
                              <p className="text-xs text-bold text-muted-foreground">

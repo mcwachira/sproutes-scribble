@@ -9,6 +9,8 @@ import ProductPicker from '@/components/products/product-picker';
 import ProductShowcase from "@/components/products/product-showcase";
 import Review from "@/components/reviews/review";
 import Reviews from "@/components/reviews/reviews";
+import {getReviewAverage} from "@/lib/review-average";
+import Stars from "@/components/reviews/stars";
 
 
 export async function generateStaticParams(){
@@ -42,12 +44,15 @@ async function Page({params}:{params:{slug: string}}) {
                         variantImages:true,
                         variantTags:true
                     }
-                }
+                },
+                reviews:true,
             }
             }}
         }
     )
     if(variant) {
+        const reviewAvg = getReviewAverage(variant?.product.reviews.map((review) => review.rating))
+        console.log(reviewAvg)
         return (
             <main>
                 <section className="flex flex-col lg:flex-row gap-4 lg:gap-12">
@@ -60,6 +65,7 @@ async function Page({params}:{params:{slug: string}}) {
                         <h2 className="text-2xl font-bold">{variant?.product.title}</h2>
                         <div>
                             <ProductType variants={variant.product.productVariants}/>
+                            <Stars rating={reviewAvg} totalReviews={variant.product.reviews.length}/>
 
                         </div>
                         <Separator className="my-2" />

@@ -4,6 +4,7 @@ import Review from "@/components/reviews/review";
 import {db} from "@/server";
 import {reviews} from "@/server/schema";
 import {desc, eq} from "drizzle-orm";
+import ReviewChart from "@/components/reviews/review-chart";
 
 async function Reviews({productID}: {productID:number}) {
 
@@ -25,6 +26,8 @@ async function Reviews({productID}: {productID:number}) {
         </div>
         <div className="flex-1 flex flex-col gap-2">
             <ReviewsForm/>
+
+            <ReviewChart reviews={data}/>
         </div>
 
 
