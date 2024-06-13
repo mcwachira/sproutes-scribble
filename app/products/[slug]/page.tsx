@@ -7,6 +7,8 @@ import {Separator} from "@/components/ui/separator";
 import formatPrice from "@/lib/format-price";
 import ProductPicker from '@/components/products/product-picker';
 import ProductShowcase from "@/components/products/product-showcase";
+import Review from "@/components/reviews/review";
+import Reviews from "@/components/reviews/reviews";
 
 
 export async function generateStaticParams(){
@@ -86,6 +88,8 @@ async function Page({params}:{params:{slug: string}}) {
                         </div>
                     </div>
                 </section>
+
+                <Reviews  productID={variant.productID}/>
             </main>
         );
     }
