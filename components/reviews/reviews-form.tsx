@@ -119,15 +119,20 @@ execute({
                                   <div className="flex">
                                       {[1,2,3,4,5,].map((value) => {
                                           return(
-                                              <motion.div className="relative cursor-pointer" whileTap={{scale:0.8}} whileHover={{scale:1.2}} key={value}>
-                                                  <Star key={value} onClick={() => { form.setValue('rating', value, {shouldValidate:true})}}
-                                                        className={cn(
-                                                            "text-primary bg-transparent transition-all duration-300 ease-in-out",
-                                                            form.getValues("rating") >= value
-                                                                ? "fill-primary"
-                                                                : "fill-muted"
-                                                        )}/>
-                                              </motion.div>
+                                              <Star
+                                                  key={value}
+                                                  onClick={() => {
+                                                      form.setValue("rating", value, {
+                                                          shouldValidate: true,
+                                                      })
+                                                  }}
+                                                  className={cn(
+                                                      "text-primary bg-transparent transition-all duration-300 ease-in-out",
+                                                      form.getValues("rating") >= value
+                                                          ? "fill-primary"
+                                                          : "fill-muted"
+                                                  )}
+                                              />
                                           )
                                       })}
                                   </div>
