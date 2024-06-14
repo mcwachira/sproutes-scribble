@@ -11,6 +11,7 @@ import Review from "@/components/reviews/review";
 import Reviews from "@/components/reviews/reviews";
 import {getReviewAverage} from "@/lib/review-average";
 import Stars from "@/components/reviews/stars";
+import AddCart from "@/components/cart/add-cart";
 
 
 export async function generateStaticParams(){
@@ -94,7 +95,7 @@ async function Page({params}:{params:{slug: string}}) {
                         </div>
                     </div>
                 </section>
-
+                    <AddCart/>
                 <Reviews  productID={variant.productID}/>
             </main>
         );
