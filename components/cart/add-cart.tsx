@@ -55,7 +55,7 @@ if(!id || !productID || !title || !type || !price || !image){
             </div>
             <Button onClick={() => {
                 toast.success(`Added ${title} to the cart`)
-                addToCart({id:productID, variant:{variantID:id, quantity },name:title + type,price, image} )
+                addToCart({id:productID, variant:{variantID:id, quantity },name:title + " " + type,price, image} )
 
             }}>
                 Add to Cart

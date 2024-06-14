@@ -31,13 +31,18 @@ function CartDrawer() {
                   </div>
               </DrawerTrigger>
 
-              <DrawerContent>
+              <DrawerContent className="min-h-50vh">
                   <DrawerHeader>
-                      <h1>
-                          Cart Stuff
+                      <h1 className="text-center">
+                          Cart Progress
                       </h1>
-                      <CartItems/>
                   </DrawerHeader>
+
+                  <div className="overflow-auto pd-4">
+                      <CartItems/>
+                  </div>
+
+
               </DrawerContent>
 
           </Drawer>

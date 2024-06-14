@@ -1,6 +1,7 @@
 import {create} from "zustand";
 import {cons} from "effect/List";
 import cartItems from "@/components/cart/cart-items";
+import {persist} from "zustand/middleware";
 
 
 export type Variant ={
@@ -22,7 +23,9 @@ export type CartState ={
     addToCart:(item:CartItem)=>void,
     removeFromCart:(item:CartItem)=>void
 }
-export const useCartStore = create<CartState>((set)  => ({
+export const useCartStore = create<CartState>()(
+    persist(
+    (set)  => ({
     cart:[],
     addToCart:(item) => set((state) => {
 
@@ -84,4 +87,9 @@ return{
 
         return {cart: updatedCart.filter((item) => item.variant.quantity)}
     })
-}))
+}), {name:'cart-storage'}
+
+
+    )
+
+)
