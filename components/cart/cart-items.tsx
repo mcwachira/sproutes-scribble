@@ -116,7 +116,7 @@ function CartItems() {
 
                                                 {item.variant.quantity}
                                             </p>
-2">
+
                                                 <PlusCircle
                                                     className="cursor-pointer hover:text-muted-foreground duration-300 transition-colors"
                                                     size={14} onClick={() => {
