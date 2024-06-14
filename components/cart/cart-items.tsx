@@ -10,10 +10,11 @@ import {AnimatePresence, motion} from 'framer-motion'
 import Lottie from "lottie-react";
 import emptyCart from '@/public/empty-box.json'
 import {createId} from "@paralleldrive/cuid2";
+import {Button} from "@/components/ui/button";
 
 function CartItems() {
 
-    const {cart,  addToCart, removeFromCart}  = useCartStore()
+    const {cart,  addToCart, removeFromCart, setCheckoutProgress}  = useCartStore()
 
     //memoize our total price  to prevent unnecessary re-renders
     const totalPrice = useMemo(() => {
@@ -36,6 +37,7 @@ function CartItems() {
             animate={{opacity:1}}
             initial={{opacity:0}}
             transition={{delay:0.5, duration:0.5}}
+            className="flex flex-col items-center"
         >
 
             {cart.length === 0 &&(
@@ -44,7 +46,7 @@ function CartItems() {
 
                      <h2 className="text-2xl text-muted-foreground text-center">
 
-                         Your Account is empty
+                         Your Cart is empty
                      </h2>
 
                      <Lottie className="h-64" animationData={emptyCart}/>
@@ -53,8 +55,8 @@ function CartItems() {
             )}
 
             {cart.length >0 && (
-                <div>
-                    <Table>
+                <div className="max-h-80 w-full  overflow-y-auto">
+                    <Table className="max-w-2xl mx-auto">
                         <TableHeader>
                             <TableRow>
                                 <TableCell>
@@ -67,7 +69,7 @@ function CartItems() {
                                     Image
                                 </TableCell>
                                 <TableCell>
-                                Quantity
+                                    Quantity
                                 </TableCell>
                                 {/*<TableCell>*/}
                                 {/*Total*/}
@@ -86,26 +88,26 @@ function CartItems() {
                                     </TableCell>
 
                                     <TableCell>
-                                   <div>
-                                       <Image
-                                           className="rounded-md"
-                                           width={48}
-                                           height={48}
-                                           src={item.image}
-                                           alt={item.name}
-                                           priority/>
-                                   </div>
+                                        <div>
+                                            <Image
+                                                className="rounded-md"
+                                                width={48}
+                                                height={48}
+                                                src={item.image}
+                                                alt={item.name}
+                                                priority/>
+                                        </div>
                                     </TableCell>
 
                                     <TableCell>
-                                        <div className="flex items-center justify-between gap-2">
+                                        <div className="flex items-center justify-between">
                                             <MinusCircle size={14}
                                                          onClick={() => {
                                                              removeFromCart({
                                                                  ...item,
-                                                                 variant:{
-                                                                     quantity:1,
-                                                                     variantID:item.variant.variantID
+                                                                 variant: {
+                                                                     quantity: 1,
+                                                                     variantID: item.variant.variantID
                                                                  }
                                                              })
                                                          }}
@@ -114,37 +116,34 @@ function CartItems() {
 
                                                 {item.variant.quantity}
                                             </p>
-
-                                            <div className="flex items-center justify-between gap-2">
+2">
                                                 <PlusCircle
                                                     className="cursor-pointer hover:text-muted-foreground duration-300 transition-colors"
-                                                    size={14} onClick={() =>
-                                                { addToCart({  ...item,
-                                                    variant:{
-                                                    quantity:1,
-                                                        variantID:item.variant.variantID,
+                                                    size={14} onClick={() => {
+                                                    addToCart({
+                                                        ...item,
+                                                        variant: {
+                                                            quantity: 1,
+                                                            variantID: item.variant.variantID,
 
-                                                    }
+                                                        }
 
-                                                })
+                                                    })
                                                 }}
 
 
-
                                                 />
-                                        </div>
-                                        {item.variant.quantity}
+                                            </div>
 
-                                        </div>
 
                                     </TableCell>
                                 </TableRow>
 
-                                ))}
+                            ))}
                         </TableBody>
                     </Table>
                 </div>
-            ) }
+            )}
 
             <motion.div className="flex items-center justify-center relative overflow-hidden my-4">
 <span className="text-md">
@@ -161,6 +160,11 @@ function CartItems() {
                     ))}
                 </AnimatePresence>
             </motion.div>
+            <Button
+                onClick={() => setCheckoutProgress("payment-page")}
+                className="max-w-md w-full" disabled={cart.length === 0}>
+                Checkout
+            </Button>
         </motion.div>
     );
 }
