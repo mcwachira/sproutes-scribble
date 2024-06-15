@@ -11,10 +11,10 @@ import OrderConfirmed from "@/components/cart/order-confirm";
 
 function CartDrawer() {
 
-    const {cart, checkoutProgress, setCheckoutProgress}   = useCartStore()
+    const {cart, checkoutProgress, setCheckoutProgress, cartOpen, setCartOpen}   = useCartStore()
     console.log(cart?.length)
     return (
-          <Drawer>
+          <Drawer open={cartOpen} onOpenChange={setCartOpen}>
               <DrawerTrigger>
                   <div className="relative px-2">
                       <AnimatePresence>
@@ -34,7 +34,7 @@ function CartDrawer() {
                   </div>
               </DrawerTrigger>
 
-              <DrawerContent className="min-h-50vh">
+              <DrawerContent className="fixed bottom-0 left-0 max-h-[70vh] min-h-[50vh] ">
                   <DrawerHeader>
                  <CartMessage/>
                   </DrawerHeader>

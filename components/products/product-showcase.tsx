@@ -48,7 +48,7 @@ console.log(variants[0].variantImages[0].url)
                                 <CarouselItem key={img.url}>
                                     {img.url ? (
                                         <Image
-                                            priority
+                                            priority={true}
                                             className="rounded-md"
                                             width={1280}
                                             height={720}

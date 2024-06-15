@@ -30,7 +30,7 @@ export default function CartMessage() {
           </span>
                 ) : null}
                 {checkoutProgress === "confirmation-page"
-                    ? "You will recieve an email with your receipt!"
+                    ? "You will receive an email with your receipt!"
                     : null}
             </DrawerDescription>
         </motion.div>

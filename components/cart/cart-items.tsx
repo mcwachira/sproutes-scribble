@@ -78,7 +78,8 @@ function CartItems() {
                         </TableHeader>
                         <TableBody>
                             {cart.map((item) => (
-                                <TableRow key={item.id}>
+                                // creating a unique id for all products no matter the color
+                                <TableRow key={(item.id + item.variant.variantID).toString()}>
                                     <TableCell>
                                         {item.name}
                                     </TableCell>

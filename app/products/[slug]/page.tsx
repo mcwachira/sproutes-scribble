@@ -14,6 +14,9 @@ import Stars from "@/components/reviews/stars";
 import AddCart from "@/components/cart/add-cart";
 
 
+//refresh data
+export const revalidate = 60
+
 export async function generateStaticParams(){
     const data = await db.query.productVariants.findMany({
         with: {

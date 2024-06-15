@@ -12,12 +12,18 @@ function Review({ reviews}:{ reviews:ReviewsWithUser[]}) {
     console.log(reviews[0]?.user.image)
     return (
      <motion.div className=" flex  flex-col gap-4">
+
+         {reviews.length  === 0 && (
+         <p className="py-2 text-md fonmt-medium">
+             No reviews Yet
+         </p>
+         )}
          {
              reviews.map((review) => (
 
 
                  <Card key={review.id} className="p-4">
-                     <div className="flex gap-2 iten-center">
+                     <div className="flex gap-2 item-center">
                          {review.user?.image && <Image className="rounded-full"  width={32} height={32}  src={review.user?.image!}  alt={review.user.name!}/>}
 
                          <div>
