@@ -6,6 +6,7 @@ import {Drawer, DrawerContent, DrawerHeader, DrawerTrigger} from "@/components/u
 import {AnimatePresence, motion} from "framer-motion";
 import CartItems from "@/components/cart/cart-items";
 import CartMessage from "@/components/cart/cart-message";
+import Payment from "@/components/cart/payment";
 
 function CartDrawer() {
 
@@ -39,6 +40,7 @@ function CartDrawer() {
 
                   <div className="overflow-auto pd-4">
                       {checkoutProgress === "cart-page" && <CartItems />}
+                      {checkoutProgress === 'payment-page'  && <Payment/>}
                   </div>
 
 
