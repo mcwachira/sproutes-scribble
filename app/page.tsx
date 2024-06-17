@@ -7,7 +7,8 @@
 
 
 
- export const revalidate = 60 * 60
+
+ export const revalidate = 60
 async  function Home() {
 
     const data = await db.query.productVariants.findMany({
