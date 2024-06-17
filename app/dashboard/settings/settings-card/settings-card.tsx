@@ -39,8 +39,8 @@ type SettingsForm={
 function SettingsCard(session:SettingsForm) {
 
 
-    const [error, setError] = useState<string | null >(null)
-    const [success, setSuccess] = useState<string | null >(null)
+    const [error, setError] = useState<string | undefined>()
+    const [success, setSuccess] = useState<string | undefined>()
 
 
     const [avatarUploading, setAvatarUploading] = useState(false)
