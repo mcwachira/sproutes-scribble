@@ -3,6 +3,7 @@
  import {productVariants} from "@/server/schema";
  import Products from "@/components/products/products";
  import Agolia from "@/components/products/agolia";
+ import ProductTags from "@/components/products/product-tags";
 
 
 
@@ -25,6 +26,7 @@ async  function Home() {
     return (
         <main className="">
             <Agolia/>
+            <ProductTags/>
             <Products variants={data}/>
         </main>
     );
