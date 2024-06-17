@@ -9,7 +9,6 @@ import FormError from "@/components/auth/form-error";
 function EmailVerificationForm() {
 
     const token = useSearchParams().get("token")
-    console.log(token)
     const router = useRouter()
     const [error,setError ] = useState("");
     const [success, setSuccess] = useState("")
@@ -21,17 +20,16 @@ function EmailVerificationForm() {
             setError('No token found')
         }
 
-        newVerification(token).then((data) => {
-            if(data.error){
+        newVerification(token as string).then((data) => {
+            if (data.error) {
                 setError(data.error)
             }
-            if(data.success){
+            if (data.success) {
                 setSuccess(data.success)
-                router.push('/auth/login')
+                router.push("/auth/login")
             }
         })
-
-    },[])
+    }, [])
 
 
     useEffect(() => {

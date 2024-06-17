@@ -47,6 +47,9 @@ const verificationToken =  await db.insert(emailVerificationTokens).values({
     return verificationToken
 }
 
+
+
+
 export const newVerification = async (token: string) => {
 
     //checking if token exist
