@@ -1,7 +1,7 @@
 import React from 'react';
 import {AlertCircle} from "lucide-react";
 
-function FormError({message}: {message:string}) {
+function FormError({message}: {message?:string}) {
 
     if(!message) return null
     return (
