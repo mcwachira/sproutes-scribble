@@ -7,7 +7,7 @@ function ProductPicker({id, color,title, price, productType, productID, image}:{
    id: number   ,
     color: string  ,
     title:string,
-    price:string,
+    price:number,
     productType: string,
     productID: number,
 image:string}) {
