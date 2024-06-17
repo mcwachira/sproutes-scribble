@@ -7,7 +7,6 @@ import {Separator} from "@/components/ui/separator";
 import formatPrice from "@/lib/format-price";
 import ProductPicker from '@/components/products/product-picker';
 import ProductShowcase from "@/components/products/product-showcase";
-import Review from "@/components/reviews/review";
 import Reviews from "@/components/reviews/reviews";
 import {getReviewAverage} from "@/lib/review-average";
 import Stars from "@/components/reviews/stars";

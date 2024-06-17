@@ -118,7 +118,7 @@ function PaymentForm({totalPrice}:{totalPrice:number}) {
             <div>
                 <Button
                     disabled={!stripe || !elements || loading}
-                    className="max-w-md w-full disabled:opacity-25"
+                    className="my-4  w-full"
                 >
           <span>
             {loading ? <span>Processing...</span> : <span>Pay now</span>}
