@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@algolia/autocomplete-js": "^1.17.2",
-    "@auth/drizzle-adapter": "^1.1.0",
+    "@auth/drizzle-adapter": "^0.9.0",
     "@hookform/resolvers": "^3.4.2",
     "@neondatabase/serverless": "^0.9.3",
     "@paralleldrive/cuid2": "^2.2.2",
