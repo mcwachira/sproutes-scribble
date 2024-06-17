@@ -26,7 +26,7 @@ export const createOrder = action(
                 const newOrderProduct = await db.insert(orderProduct).values({
                     quantity,
                     orderID:order[0].id,
-                    product:productID,
+                    productID:productID,
                     productVariantID: variantID
                 })
 
