@@ -2,6 +2,7 @@
  import {db} from "@/server";
  import {productVariants} from "@/server/schema";
  import Products from "@/components/products/products";
+ import Agolia from "@/components/products/agolia";
 
 
 
@@ -23,6 +24,7 @@ async  function Home() {
 
     return (
         <main className="">
+            <Agolia/>
             <Products variants={data}/>
         </main>
     );
