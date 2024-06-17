@@ -8,6 +8,8 @@ import CartItems from "@/components/cart/cart-items";
 import CartMessage from "@/components/cart/cart-message";
 import Payment from "@/components/cart/payment";
 import OrderConfirmed from "@/components/cart/order-confirm";
+import CartProgress from "@/components/cart/cart-progress";
+
 
 function CartDrawer() {
 
@@ -38,6 +40,8 @@ function CartDrawer() {
                   <DrawerHeader>
                  <CartMessage/>
                   </DrawerHeader>
+
+                  <CartProgress/>
 
                   <div className="overflow-auto pd-4">
                       {checkoutProgress === "cart-page" && <CartItems />}
