@@ -95,30 +95,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }),
 
         Credentials({
-            authorize:async(credentials) => {
+            authorize: async (credentials) => {
                 const validatedFields = LoginSchema.safeParse(credentials)
-                console.log('validate', validatedFields)
 
-                if(validatedFields.success){
-
-                    const {email, password} = validatedFields.data;
+                if (validatedFields.success) {
+                    const { email, password } = validatedFields.data
 
                     const user = await db.query.users.findFirst({
-                        where:eq(users.email, email)
+                        where: eq(users.email, email),
                     })
+                    if (!user || !user.password) return null
 
-                    //check if user exist
-                    if(!user || !user.password) return;
-
-                    const passwordMatch= await  bcrypt.compare(password, user.password)
-
-                    if(passwordMatch)  return user
-
-
+                    const passwordMatch = await bcrypt.compare(password, user.password)
+                    if (passwordMatch) return user
                 }
-
                 return null
-            }
-        })
+            },
+        }),
     ],
 })
